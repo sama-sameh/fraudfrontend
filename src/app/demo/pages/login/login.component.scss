@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+$primary-color: #0056b3;
+$secondary-color: #003366;
+$error-color: #d32f2f;
+$success-color: #388e3c;
+$light-gray: #f5f5f5;
+$medium-gray: #e0e0e0;
+$dark-gray: #757575;
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  url('https://images.unsplash.com/photo-1601597111158-2fceff292cdc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+  background-size: cover;
+  font-family: 'Poppins', sans-serif;
+  padding: 2rem;
+}
+
+.login-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 450px;
+  padding: 2.5rem;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.bank-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  svg {
+    width: 60px;
+    height: 60px;
+    fill: $secondary-color;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    color: $secondary-color;
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin: 0;
+  }
+}
+
+.login-form {
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: $secondary-color;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid $medium-gray;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+      }
+
+      &::placeholder {
+        color: $dark-gray;
+      }
+    }
+  }
+
+  .error-message {
+    color: $error-color;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+
+    &.server-error {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+
+    input {
+      margin-right: 0.5rem;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: $dark-gray;
+    }
+  }
+
+  .forgot-password {
+    color: $primary-color;
+    text-decoration: none;
+    font-size: 0.9rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+
+  &:disabled {
+    background-color: $medium-gray;
+    cursor: not-allowed;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: $dark-gray;
+
+  a {
+    color: $primary-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.security-notice {
+  margin-top: 2rem;
+  text-align: center;
+  color: white;
+  max-width: 450px;
+
+  .security-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+
+    .security-icon {
+      svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+      }
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

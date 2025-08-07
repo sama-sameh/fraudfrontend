@@ -1,0 +1,99 @@
+<div class="buttons">
+  <div class="bttn-run">
+    <button  pButton type="button" icon="pi pi-play" label="Run Rules"
+             (click)="runRules()"></button>
+  </div>
+  <div class="bttn">
+    <button  pButton type="button" icon="pi pi-plus" label="Add Rule" class="add-rule-btn"
+             (click)="openAddRuleDialog()"></button>
+  </div>
+</div>
+<p-treetable
+  [value]="files"
+  [tableStyle]="{ 'min-width': '70rem' }"
+  class="fraud-system-table"
+  [resizableColumns]="true"
+  columnResizeMode="expand">
+
+  <ng-template pTemplate="header">
+    <tr class="header">
+      <th style="width: 33%; ">Rule Name</th>
+      <th style="width: 33%">Description</th>
+      <th style="width: 33%;text-align: center">Status</th>
+    </tr>
+  </ng-template>
+
+
+  <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+    <tr [ttRow]="rowNode" [class.high-severity]="rowData.severity === 'High'">
+      <td>
+        <div class="rule-name-container">
+          <p-treetable-toggler [rowNode]="rowNode" *ngIf="!rowNode.leaf" />
+          <i class="pi pi-shield" *ngIf="rowNode.leaf"></i>
+          <span class="rule-name">{{ rowData.name }}</span>
+
+        </div>
+      </td>
+      <td>
+        <div class="rule-description">
+          <div class="description-text">{{ rowData.type }}</div>
+          <div class="conditions" *ngIf="rowData.conditions">
+            <div class="condition" *ngFor="let condition of rowData.conditions">
+
+              {{ condition }}
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="status">
+          <div class="part">
+            <span class="status-badge" [ngClass]="{
+          'status-active': rowData.status === 'Published',
+          'status-inactive': rowData.status === 'Inactive',
+          'status-draft': rowData.status === 'Draft',
+          'status-archived': rowData.status === 'Archived'
+        }">
+          <i [class]="getStatusIcon(rowData.status)"></i>
+              {{ rowData.status }}
+        </span>
+          </div>
+          <div class="add" *ngIf="!rowNode.parent">
+            <button pButton icon="pi pi-plus"
+                    class="p-button-sm p-button-text"
+                    (click)="navigateToAddCondition(rowData)"
+                    tooltip="Add Condition"></button>
+          </div>
+          <div class="delete">
+            <button
+              pButton
+              icon="pi pi-trash"
+              class="p-button-sm p-button-text p-button-danger"
+              (click)="confirmDelete(rowData, rowNode.parent)"
+              [pTooltip]="rowNode.parent ? 'Delete Condition' : 'Delete Rule'"
+            ></button>
+          </div>
+
+        </div>
+      </td>
+
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="4" class="empty-message">
+        <i class="pi pi-search"></i>
+        No fraud rules found
+      </td>
+    </tr>
+  </ng-template>
+</p-treetable>
+
+@if (displayAddRuleDialog){
+  <app-dialog [formType]="'rule'" [visible]="displayAddRuleDialog" (close)="onAddRuleDialogClose()"></app-dialog>
+}
+@if (displayAddConditionDialog){
+  <app-conditionform [selectedRuleId]="selectedRule" [visible]="displayAddConditionDialog" (close)="onAddConditionDialogClose()"></app-conditionform>
+}
+<p-confirmDialog></p-confirmDialog>

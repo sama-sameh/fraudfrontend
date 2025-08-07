@@ -1,0 +1,114 @@
+<div class="row">
+  <div class="col-xl-4 col-md-6">
+    <div class="card earning-card bg-primary-dark text-white overflow-hidden">
+      <span class="round primary-round small"></span>
+      <span class="round primary-round big"></span>
+      <div class="card-body">
+        <span class="text-white d-block f-34 f-w-500 my-2 title">
+          Number Of Customers
+
+        </span>
+        <p class="count">{{myDashboard.customerNo}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-md-6">
+    <div class="card total-income-card warning overflow-hidden" style="background-color: #fdb851; border-left: 5px solid #fff;">
+      <div class="card-body">
+
+
+        <div class="ms-2">
+        <span class="d-block f-34 f-w-500 my-2 text-white title">
+          ⚠️ Number Of Alerts
+        </span>
+          <p class="count text-white">100</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-xl-4 col-md-6">
+    <div class="card total-income-card warning overflow-hidden" style="background-color: #ea2a47; border-left: 5px solid #fff;">
+      <div class="card-body">
+
+
+        <div class="ms-2">
+        <span class="d-block f-34 f-w-500 my-2 text-white title">
+          suspicious Transactions
+        </span>
+          <p class="count text-white">{{myDashboard.suspectCount}}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-suspects-per-day-char [suspectsPerDay]="myDashboard.suspectCountPerDay"></app-suspects-per-day-char>
+    </div>
+    <div class="col-md-6">
+      <app-barchart [alertAndRules]="myDashboard.countSuspectPerRule"></app-barchart>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <app-account-suspect-chart [alertAndAccounts]="myDashboard.countSuspectPerAccount"></app-account-suspect-chart>
+    </div>
+    <div class="col-md-6">
+      <app-amount-frequency-chart [transactions]="myDashboard.transactionScatters"></app-amount-frequency-chart>
+    </div>
+  </div>
+  <div class="col-xl-4 col-md-12">
+<!--    <div class="card">-->
+<!--      <div class="card-body">-->
+<!--        <div class="row mb-3 align-items-center">-->
+<!--          <div class="col">-->
+<!--            <h4>Popular Stocks</h4>-->
+<!--          </div>-->
+<!--          <div class="col-auto"></div>-->
+<!--        </div>-->
+<!--        <div class="rounded bg-light-secondary overflow-hidden mb-3">-->
+<!--          <div class="px-3 pt-3">-->
+<!--            <div class="row mb-1 align-items-start">-->
+<!--              <div class="col">-->
+<!--                <h5 class="text-secondary mb-0">Bajaj Finery</h5>-->
+<!--                <small class="text-muted">10% Profit</small>-->
+<!--              </div>-->
+<!--              <div class="col-auto">-->
+<!--                <h4 class="mb-0">$1839.00</h4>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <app-bajaj-chart />-->
+<!--        </div>-->
+<!--        <ul class="list-group list-group-flush">-->
+<!--          @for (list of ListGroup; track list) {-->
+<!--            <li class="list-group-item px-0 {{ list.space }}">-->
+<!--              <div class="row align-items-start">-->
+<!--                <div class="col">-->
+<!--                  <h5 class="mb-0">{{ list.name }}</h5>-->
+<!--                  <small class="{{ list.color }}">{{ list.profit }}</small>-->
+<!--                </div>-->
+<!--                <div class="col-auto">-->
+<!--                  <h4 class="mb-0">-->
+<!--                    {{ list.invest }}-->
+<!--                    <span class="ms-2 align-top avatar avatar-xxs {{ list.bgColor }}">-->
+<!--                      <i class="{{ list.icon }} {{ list.color }}"></i>-->
+<!--                    </span>-->
+<!--                  </h4>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </li>-->
+<!--          }-->
+<!--        </ul>-->
+<!--        <div class="text-center">-->
+<!--          <a href="javascript:" class="b-b-primary text-primary f-w-500">-->
+<!--            View all-->
+<!--            <i class="ti ti-chevron-right"></i>-->
+<!--          </a>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+  </div>
+</div>

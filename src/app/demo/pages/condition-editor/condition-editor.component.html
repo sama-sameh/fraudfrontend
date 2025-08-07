@@ -1,0 +1,55 @@
+<div class="condition-editor">
+  <div class="condition-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Field</mat-label>
+      <mat-select [(ngModel)]="condition.field">
+        <mat-option *ngFor="let field of fields" [value]="field.value">
+          {{ field.display }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Operator</mat-label>
+      <mat-select [(ngModel)]="condition.operator">
+        <mat-option *ngFor="let op of operators" [value]="op.value">
+          {{ op.display }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Value</mat-label>
+      <input matInput [(ngModel)]="condition.value" placeholder="Enter value">
+    </mat-form-field>
+  </div>
+
+  <div class="condition-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Aggregation</mat-label>
+      <mat-select [(ngModel)]="condition.aggregationFunction">
+        <mat-option *ngFor="let agg of aggregationFunctions" [value]="agg.value">
+          {{ agg.display }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="condition.aggregationFunction" appearance="outline">
+      <mat-label>Time Interval</mat-label>
+      <mat-select [(ngModel)]="condition.time_interval">
+        <mat-option *ngFor="let interval of timeIntervals" [value]="interval.value">
+          {{ interval.display }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Connector</mat-label>
+      <mat-select [(ngModel)]="condition.logicalConnector">
+        <mat-option *ngFor="let conn of logicalConnectors" [value]="conn.value">
+          {{ conn.display }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

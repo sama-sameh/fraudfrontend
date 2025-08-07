@@ -1,0 +1,150 @@
+<!-- transfer-money.component.html -->
+<div class="transfer-container" [ngClass]="{'processing': isProcessing}">
+  <div class="transfer-header">
+    <h2><i class="fas fa-exchange-alt"></i> Money Transfer</h2>
+    <p>Send money securely to any account</p>
+  </div>
+
+  <div class="transfer-card">
+    <div class="transfer-form">
+      <form [formGroup]="transferForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="accountFrom">Choose Account</label>
+          <select id="accountFrom" formControlName="accountFrom" class="form-control">
+            <option value="" disabled>Select an account</option>
+            <option *ngFor="let account of userAccounts" [value]="account.account_no">
+              {{account.account_no}}
+            </option>
+          </select>
+
+          <div *ngIf="transferForm.get('accountFrom')?.invalid &&
+             (transferForm.get('accountFrom')?.dirty || !transferForm.get('accountFrom')?.untouched)"
+               class="error-message">
+    <span *ngIf="transferForm.get('accountFrom')?.errors?.['required']">
+      Account number is required
+    </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="accountNumber">Recipient Account Number</label>
+          <input type="text" id="accountNumber" formControlName="accountTo"
+                 placeholder="Enter account number" class="form-control">
+          <div *ngIf="transferForm.get('accountTo')?.invalid &&
+                     (transferForm.get('accountTo')?.dirty || !transferForm.get('accountTo')?.untouched)"
+               class="error-message">
+            <span *ngIf="transferForm.get('accountTo')?.errors?.['required']">
+              Account number is required
+            </span>
+            <span *ngIf="transferForm.get('accountTo')?.errors?.['pattern']">
+              Invalid account number format
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="amount">Amount</label>
+          <div class="input-group">
+            <span class="input-group-text">{{currencySymbol}}</span>
+            <input type="number" id="amount" formControlName="amount"
+                   placeholder="0.00" class="form-control">
+          </div>
+          <div *ngIf="transferForm.get('amount')?.invalid &&
+                     (transferForm.get('amount')?.dirty || !transferForm.get('amount')?.untouched)"
+               class="error-message">
+            <span *ngIf="transferForm.get('amount')?.errors?.['required']">
+              Amount is required
+            </span>
+            <span *ngIf="transferForm.get('amount')?.errors?.['min']">
+              Minimum transfer amount is {{minTransferAmount | currency:currencyCode}}
+            </span>
+            <span *ngIf="transferForm.get('amount')?.errors?.['max']">
+              Maximum transfer amount is {{maxTransferAmount | currency:currencyCode}}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description (Optional)</label>
+          <textarea id="description" formControlName="description"
+                    placeholder="Add a note about this transfer"
+                    class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="security-info">
+          <div class="security-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Secured with 256-bit encryption</span>
+          </div>
+          <div class="security-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Location: {{currentLocation}}</span>
+          </div>
+<!--          <div class="security-item">-->
+<!--            <i class="fas fa-mobile-alt"></i>-->
+<!--            <span>Device: {{deviceInfo.device_type}} ({{deviceInfo.ip_address}})</span>-->
+<!--          </div>-->
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!transferForm.valid || isProcessing">
+            <span *ngIf="!isProcessing">Transfer Now</span>
+            <span *ngIf="isProcessing">
+              <i class="fas fa-spinner fa-spin"></i> Processing...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="transfer-preview" *ngIf="showPreview">
+      <div class="preview-header">
+        <h3>Transfer Summary</h3>
+      </div>
+      <div class="preview-content">
+        <div class="preview-item">
+          <span>To Account:</span>
+          <strong>{{transferForm.value.accountTo }}</strong>
+        </div>
+        <div class="preview-item">
+          <span>Amount:</span>
+          <strong>{{transferForm.value.amount | currency:currencyCode}}</strong>
+        </div>
+        <div class="preview-item" *ngIf="transferForm.value.description">
+          <span>Description:</span>
+          <strong>{{transferForm.value.description}}</strong>
+        </div>
+        <div class="preview-item">
+          <span>Fee:</span>
+          <strong>{{transferFee | currency:currencyCode}}</strong>
+        </div>
+        <div class="preview-item total">
+          <span>Total:</span>
+          <strong>{{transferForm.value.amount + transferFee | currency:currencyCode}}</strong>
+        </div>
+      </div>
+      <div class="preview-actions">
+        <button type="button" class="btn btn-outline-secondary" (click)="showPreview = false">Edit</button>
+        <button type="button" class="btn btn-success" (click)="confirmTransfer()">Confirm Transfer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" *ngIf="showSuccessModal">
+    <div class="modal-content">
+      <div class="modal-icon success">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Transfer Successful!</h3>
+      <p>Your transfer of {{transferForm.value.amount | currency:currencyCode}} has been completed.</p>
+<!--      <div class="transaction-details">-->
+<!--        <p><strong>Transaction #:</strong> {{transactionResponse?.transaction_no}}</p>-->
+<!--        <p><strong>Date:</strong> {{transactionResponse?.date | date:'medium'}}</p>-->
+<!--        <p><strong>Status:</strong> <span class="status-success">{{transactionResponse?.status}}</span></p>-->
+<!--      </div>-->
+      <button type="button" class="btn btn-primary" (click)="closeSuccessModal()">Done</button>
+    </div>
+  </div>
+</div>

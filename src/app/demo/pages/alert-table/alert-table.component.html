@@ -1,0 +1,633 @@
+<!--<div class="fraud-system-container">-->
+<!--  <div class="header">-->
+<!--    <div class="controls">-->
+<!--      <button class="refresh-btn" (click)="refreshData()">-->
+<!--        <i class="fas fa-sync-alt"></i> Reset-->
+<!--      </button>-->
+<!--      <div class="filter-control">-->
+<!--        <input type="text" [(ngModel)]="globalFilter" placeholder="Global search..."-->
+<!--               (input)="onGlobalFilter()">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="table-container">-->
+<!--    <table class="fraud-alert-table" >-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th (click)="sortData('suspectId')">-->
+<!--          ID <i class="fas fa-sort"></i>-->
+<!--        </th>-->
+<!--        <th >-->
+<!--          Date<i class="fas fa-sort"></i>-->
+<!--        </th>-->
+<!--        <th >-->
+<!--          AlertModel Age<i class="fas fa-sort"></i>-->
+<!--        </th>-->
+<!--&lt;!&ndash;        <th (click)="sortData('account.accountNo')">&ndash;&gt;-->
+<!--&lt;!&ndash;          Account No <i class="fas fa-sort"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;          <input type="text" [(ngModel)]="accountNoFilter"&ndash;&gt;-->
+<!--&lt;!&ndash;                 (input)="applyFilter('account.accountNo', accountNoFilter)">&ndash;&gt;-->
+<!--&lt;!&ndash;        </th>&ndash;&gt;-->
+
+<!--        <th (click)="sortData('customer.customer.id')">-->
+<!--          Customer ID <i class="fas fa-sort"></i>-->
+<!--          <input type="text" [(ngModel)]="customerIdFilter"-->
+<!--                 (input)="applyFilter('account.customerId', customerIdFilter)">-->
+<!--        </th>-->
+<!--        <th >-->
+<!--          Customer Name <i class="fas fa-sort"></i>-->
+<!--          <input type="text" [(ngModel)]="customerIdFilter"-->
+<!--                 (input)="applyFilter('account.customerId', customerIdFilter)">-->
+<!--        </th>-->
+<!--&lt;!&ndash;        <th (click)="sortData('transaction.transactionId')">&ndash;&gt;-->
+<!--&lt;!&ndash;          Transaction ID <i class="fas fa-sort"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;          <input type="text" [(ngModel)]="transactionIdFilter"&ndash;&gt;-->
+<!--&lt;!&ndash;                 (input)="applyFilter('transaction.transactionId', transactionIdFilter)">&ndash;&gt;-->
+<!--&lt;!&ndash;        </th>&ndash;&gt;-->
+<!--        <th (click)="sortData('rule.ruleName')">-->
+<!--          Rule Name <i class="fas fa-sort"></i>-->
+<!--          <select [(ngModel)]="ruleNameFilter"-->
+<!--                  (change)="applyFilter('rule.ruleName', ruleNameFilter)">-->
+<!--            <option value="">All</option>-->
+<!--            <option *ngFor="let rule of ruleNames" [value]="rule">{{rule}}</option>-->
+<!--          </select>-->
+<!--        </th>-->
+<!--&lt;!&ndash;        <th (click)="sortData('actionMessage')">&ndash;&gt;-->
+<!--&lt;!&ndash;          Action Message<i class="fas fa-sort"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;        </th>&ndash;&gt;-->
+<!--        <th >-->
+<!--          Priority <i class="fas fa-sort"></i>-->
+<!--          <select [(ngModel)]="ruleNameFilter"-->
+<!--                  (change)="applyFilter('rule.ruleName', ruleNameFilter)">-->
+<!--            <option value="High">High</option>-->
+<!--            <option value="Medium">Medium</option>-->
+<!--            <option value="Low">Low</option>-->
+<!--          </select>-->
+<!--        </th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <tr *ngFor="let suspect of filteredSuspects"-->
+<!--          (click)="showSuspectDetails(suspect)"-->
+<!--          [class.selected]="selectedSuspect?.suspectId === suspect.suspectId">-->
+<!--        <td>{{suspect.suspectId}}</td>-->
+<!--        <td>{{suspect.date | date: 'yyyy-MM-dd'  }}</td>-->
+<!--        <td>{{suspect.suspectAge}}</td>-->
+<!--&lt;!&ndash;        <td>{{suspect.account?.account_no || ''}}</td>&ndash;&gt;-->
+<!--        <td>{{suspect.customer.id}}</td>-->
+<!--        <td>{{suspect.customer.name}}</td>-->
+<!--&lt;!&ndash;        <td>{{suspect.transaction?.transaction_no ||''}}</td>&ndash;&gt;-->
+<!--        <td>{{suspect.rule.rule_name}}</td>-->
+<!--        <td>{{suspect.rule.priority}}</td>-->
+<!--&lt;!&ndash;        <td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <span class="action-tag" [ngClass]="getActionClass(suspect.actionMassage)">&ndash;&gt;-->
+<!--&lt;!&ndash;              {{suspect.actionMassage}}&ndash;&gt;-->
+<!--&lt;!&ndash;            </span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </td>&ndash;&gt;-->
+<!--      </tr>-->
+
+<!--      <tr *ngIf="filteredSuspects.length === 0">-->
+<!--        <td colspan="6" class="no-results">No suspects found matching your criteria</td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </div>-->
+
+<!--  <div class="pagination-controls" *ngIf="filteredSuspects.length > 0">-->
+<!--    <button (click)="previousPage()" [disabled]="currentPage === 1">-->
+<!--      <i class="fas fa-chevron-left"></i> Previous-->
+<!--    </button>-->
+<!--    <span>Page {{currentPage}} of {{totalPages}}</span>-->
+<!--    <button (click)="nextPage()" [disabled]="currentPage === totalPages">-->
+<!--      Next <i class="fas fa-chevron-right"></i>-->
+<!--    </button>-->
+<!--    <select [(ngModel)]="itemsPerPage" (change)="changePageSize()">-->
+<!--      <option value="10">10 per page</option>-->
+<!--      <option value="25">25 per page</option>-->
+<!--      <option value="50">50 per page</option>-->
+<!--      <option value="100">100 per page</option>-->
+<!--    </select>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Details Panel &ndash;&gt;-->
+<!--&lt;!&ndash;<div class="details-panel" *ngIf="selectedSuspect">&ndash;&gt;-->
+<!--&lt;!&ndash;  <div class="details-header">&ndash;&gt;-->
+<!--&lt;!&ndash;    <h3>Suspect Details</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;    <button class="close-btn" (click)="selectedSuspect = null">&ndash;&gt;-->
+<!--&lt;!&ndash;      <i class="fas fa-times"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;    </button>&ndash;&gt;-->
+<!--&lt;!&ndash;  </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;  <div class="details-content">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="detail-section">&ndash;&gt;-->
+<!--&lt;!&ndash;      <h4>Account Information</h4>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Account No:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.account?.account_no}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Customer ID:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.customer.id}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Account Type:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.account?.type}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Balance:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.account?.balance | currency}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <div class="detail-section">&ndash;&gt;-->
+<!--&lt;!&ndash;      <h4>Transaction Information</h4>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Transaction ID:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.transaction?.transaction_no}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Amount:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.transaction?.amount | currency}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Date:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.transaction?.date | date:'medium'}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Type:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.transaction?.type}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      <div class="detail-row">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <span class="detail-label">Counterparty:</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <span>{{selectedSuspect.transaction?.counterparty}}</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      </div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <div class="detail-section">&ndash;&gt;-->
+<!--&lt;!&ndash;      <h4>Rule Information</h4>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Rule Name:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.rule?.rule_name}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      <div class="detail-row">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <span class="detail-label">Severity:</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <span class="severity-tag {{selectedSuspect.rule?.severity.toLowerCase()}}">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;          {{selectedSuspect.rule?.severity}}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        </span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      </div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Description:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>{{selectedSuspect.rule?.type}}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <div class="detail-section">&ndash;&gt;-->
+<!--&lt;!&ndash;      <h4>Action Message</h4>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="detail-row">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="detail-label">Status:</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="action-tag {{getActionClass(selectedSuspect.actionMassage)}}">&ndash;&gt;-->
+<!--&lt;!&ndash;          {{selectedSuspect.actionMassage}}&ndash;&gt;-->
+<!--&lt;!&ndash;        </span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      <div class="detail-row">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <span class="detail-label">Detected At:</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <span>{{selectedSuspect.detectedAt | date:'medium'}}</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      </div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      <div class="detail-row">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <span class="detail-label">Notes:</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <textarea [(ngModel)]="selectedSuspect.notes" placeholder="Add investigation notes..."></textarea>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      </div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <div class="action-buttons">&ndash;&gt;-->
+<!--&lt;!&ndash;      <button class="btn-block" (click)="takeAction('Block')">&ndash;&gt;-->
+<!--&lt;!&ndash;        <i class="fas fa-ban"></i> Block Account&ndash;&gt;-->
+<!--&lt;!&ndash;      </button>&ndash;&gt;-->
+<!--&lt;!&ndash;      <button class="btn-flag" (click)="takeAction('Flag')">&ndash;&gt;-->
+<!--&lt;!&ndash;        <i class="fas fa-flag"></i> Flag for Review&ndash;&gt;-->
+<!--&lt;!&ndash;      </button>&ndash;&gt;-->
+<!--&lt;!&ndash;      <button class="btn-clear" (click)="takeAction('Clear')">&ndash;&gt;-->
+<!--&lt;!&ndash;        <i class="fas fa-check-circle"></i> Clear Suspect&ndash;&gt;-->
+<!--&lt;!&ndash;      </button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;  </div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+
+
+<!--<p-dialog-->
+<!--  [(visible)]="display"-->
+<!--  [modal]="true"-->
+<!--  [style]="{ width: '700px' }"-->
+<!--  [dismissableMask]="true"-->
+<!--  [closable]="true"-->
+<!--  [contentStyle]="{ 'max-height': '600px', overflow: 'auto' }"-->
+<!--  class="suspect-dialog"-->
+<!--  header="Suspect Details"-->
+<!--&gt;-->
+<!--&lt;!&ndash;  <div class="title">Suspect Details</div>&ndash;&gt;-->
+<!--  <div class="dialog-container">-->
+<!--    &lt;!&ndash; Account Info &ndash;&gt;-->
+<!--    <div class="info-card account-info">-->
+<!--      <h3><i class="pi pi-user"></i> Account Information</h3>-->
+<!--      <div class="info-grid">-->
+<!--        <div><strong>Account No:</strong> {{ selectedSuspect?.account?.account_no }}</div>-->
+<!--        <div><strong>Customer ID:</strong> {{ selectedSuspect?.customer?.id }}</div>-->
+<!--        <div><strong>Currency:</strong> {{ selectedSuspect?.account?.currency||'' }}</div>-->
+<!--        <div><strong>Type:</strong> {{ selectedSuspect?.account?.type||'' }}</div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Transaction Info &ndash;&gt;-->
+<!--    @if ( selectedSuspect?.transaction){-->
+<!--      <div class="info-card transaction-info">-->
+<!--        <h3><i class="pi pi-money-bill"></i> Transaction Information</h3>-->
+<!--        <div class="info-grid">-->
+<!--          <div><strong>Transaction No:</strong> {{ selectedSuspect?.transaction?.transaction_no||'' }}</div>-->
+<!--          <div><strong>To Account:</strong> {{ selectedSuspect?.account.account_no||''}}</div>-->
+<!--          <div><strong>Amount:</strong> {{ selectedSuspect?.transaction?.amount||'' }}</div>-->
+<!--          <div><strong>Date:</strong> {{ selectedSuspect?.transaction?.date||'' |  date }}</div>-->
+<!--          <div><strong>IP Address:</strong> {{ selectedSuspect?.transaction?.device.ipAddress||'' }}</div>-->
+<!--          <div><strong>Location:</strong> {{ selectedSuspect?.transaction?.location||''}}</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    }-->
+
+
+<!--    &lt;!&ndash; Rule Info &ndash;&gt;-->
+<!--    <div class="info-card rule-info">-->
+<!--      <h3><i class="pi pi-shield"></i> Rule Information</h3>-->
+<!--      <div class="info-grid">-->
+<!--        <div><strong>Rule Name:</strong> {{ selectedSuspect?.rule?.rule_name }}</div>-->
+<!--        <div><strong>Action:</strong>-->
+
+<!--            {{ selectedSuspect?.actionMassage }}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</p-dialog>-->
+
+
+
+<div class="fraud-system-container">
+  <!-- Header -->
+  <p-toolbar class="fraud-header">
+<!--    <ng-template pTemplate="start">-->
+<!--      <div class="header-title">-->
+<!--        <i class="pi pi-shield" style="font-size: 1.5rem; margin-right: 0.5rem;"></i>-->
+<!--        <h1>Fraud Detection System</h1>-->
+<!--      </div>-->
+<!--    </ng-template>-->
+
+    <ng-template pTemplate="end">
+      <div class="header-controls">
+
+        <p-button
+          icon="pi pi-refresh"
+          label="Reset"
+          severity="danger"
+          (onClick)="refreshData()"
+          [outlined]="true"
+          class="mr-2">
+        </p-button>
+        <p-button
+          icon="pi pi-file-export"
+          label="Export"
+          (onClick)="exportReport()"
+          [outlined]="true"
+          class="mr-2">
+        </p-button>
+
+<!--        <span class="p-input-icon-left">-->
+<!--              <i class="pi pi-search"></i>-->
+<!--              <input-->
+<!--                type="text"-->
+<!--                pInputText-->
+<!--                [(ngModel)]="globalFilter"-->
+<!--                placeholder="Global search..."-->
+<!--                (input)="onGlobalFilter($event)"-->
+<!--                class="global-search-input">-->
+<!--            </span>-->
+      </div>
+    </ng-template>
+  </p-toolbar>
+
+  <!-- Main Table -->
+  <div class="table-wrapper">
+    <p-table
+      [value]="filteredSuspects"
+      [paginator]="true"
+      [rows]="itemsPerPage"
+      [rowsPerPageOptions]="[10, 25, 50, 100]"
+      [totalRecords]="filteredSuspects.length"
+      [loading]="loading"
+      dataKey="suspectId"
+      [globalFilterFields]="['suspectId', 'customer.name', 'customer.id', 'rule.rule_name', 'rule.priority']"
+      styleClass="p-datatable-striped p-datatable-gridlines"
+      [tableStyle]="{'min-width': '80rem'}"
+      >
+
+      <!-- Suspect ID Column -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="suspectId" class="suspect-id-column">
+            <div class="column-header">
+              <div class="column-title">
+                Suspect ID <p-sortIcon field="suspectId"></p-sortIcon>
+              </div>
+            </div>
+          </th>
+
+          <th pSortableColumn="date" class="date-column">
+            <div class="column-header">
+              <div class="column-title">
+                Date <p-sortIcon field="date"></p-sortIcon>
+              </div>
+            </div>
+          </th>
+
+          <th pSortableColumn="alertAge" class="alert-age-column">
+            <div class="column-header">
+              <div class="column-title">
+                Alert Age <p-sortIcon field="alertAge"></p-sortIcon>
+              </div>
+            </div>
+          </th>
+
+          <th pSortableColumn="customer.id" class="customer-id-column">
+            <div class="column-header">
+              <div class="column-title">
+                Customer ID <p-sortIcon field="customer.id"></p-sortIcon>
+              </div>
+              <div class="column-filter">
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="customerIdFilter"
+                  (input)="applyFilter('customer.id', customerIdFilter)"
+                  placeholder="Filter..."
+                  size="small">
+              </div>
+            </div>
+          </th>
+
+          <th pSortableColumn="customer.name" class="customer-name-column">
+            <div class="column-header">
+              <div class="column-title">
+                Customer Name
+              </div>
+              <div class="column-filter">
+                <input
+                  type="text"
+                  pInputText
+                  [(ngModel)]="customerNameFilter"
+                  (input)="applyFilter('customer.name', customerNameFilter)"
+                  placeholder="Filter..."
+                  size="small">
+              </div>
+            </div>
+          </th>
+
+          <th pSortableColumn="rule.rule_name" class="rule-name-column">
+            <div class="column-header">
+              <div class="column-title">
+                Rule Name
+              </div>
+              <div class="column-filter">
+                <p-dropdown
+                  [options]="ruleNames"
+                  [(ngModel)]="ruleNameFilter"
+                  (onChange)="applyFilter('rule.rule_name', ruleNameFilter)"
+                  placeholder="All Rules"
+                  [showClear]="true"
+                  size="small">
+                </p-dropdown>
+              </div>
+            </div>
+          </th>
+
+          <th pSortableColumn="rule.priority" class="priority-column">
+            <div class="column-header">
+              <div class="column-title">
+                Priority
+              </div>
+              <div class="column-filter">
+                <p-dropdown
+                  [options]="priorityOptions"
+                  [(ngModel)]="priorityFilter"
+                  (onChange)="applyFilter('rule.priority', priorityFilter)"
+                  placeholder="All Priorities"
+                  [showClear]="true"
+                  size="small">
+                </p-dropdown>
+              </div>
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+
+      <!-- Table Body -->
+      <ng-template pTemplate="body" let-suspect let-rowIndex="rowIndex">
+        <tr
+          (click)="showSuspectDetails(suspect)"
+          class="suspect-row"
+          [class.selected-row]="selectedSuspect?.suspectId === suspect.suspectId">
+
+          <td class="suspect-id-cell">
+            <span class="suspect-id-badge">{{ suspect.suspectId }}</span>
+          </td>
+
+          <td class="date-cell">
+            {{ suspect.date | date:'dd/MM/yyyy' }}
+          </td>
+
+          <td class="alert-age-cell">
+            <p-badge
+              [value]="suspect.alertAge"
+              [severity]="getAlertAgeSeverity(suspect.alertAge)">
+            </p-badge>
+          </td>
+
+          <td class="customer-id-cell">
+            {{ suspect.customer.id }}
+          </td>
+
+          <td class="customer-name-cell">
+            <div class="customer-info">
+              <i class="pi pi-user customer-icon"></i>
+              {{ suspect.customer.name }}
+            </div>
+          </td>
+
+          <td class="rule-name-cell">
+            <span class="rule-badge">{{ suspect.rule.rule_name }}</span>
+          </td>
+
+          <td class="priority-cell">
+            <p-tag
+              [value]="suspect.rule.priority"
+              [severity]="getPrioritySeverity(suspect.rule.priority)"
+              [icon]="getPriorityIcon(suspect.rule.priority)">
+            </p-tag>
+
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Empty State -->
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="empty-state">
+            <div class="empty-content">
+              <i class="pi pi-search empty-icon"></i>
+              <h3>No suspects found</h3>
+              <p>No suspects match your current search criteria</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Suspect Details Dialog -->
+<p-dialog
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '800px' }"
+  [dismissableMask]="true"
+  [closable]="true"
+  header="Suspect Details"
+  styleClass="suspect-dialog"
+  [maximizable]="true">
+
+  <div class="dialog-content" *ngIf="selectedSuspect">
+    <!-- Account Information Card -->
+    <p-panel  styleClass="info-panel account-panel">
+      <ng-template pTemplate="header">
+        <div class="panel-header">
+          <i class="pi pi-user panel-icon"></i>
+          <span>Account Information</span>
+        </div>
+      </ng-template>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label class="info-label">Account Number</label>
+          <span class="info-value">{{ selectedSuspect.account?.account_no || ' ' }}</span>
+        </div>
+<!--        <div class="info-item">-->
+<!--          <label class="info-label">Customer ID</label>-->
+<!--          <span class="info-value">{{ selectedSuspect.customer?.id }}</span>-->
+<!--        </div>-->
+        <div class="info-item">
+          <label class="info-label">Customer Name</label>
+          <span class="info-value">{{ selectedSuspect.customer?.name }}</span>
+        </div>
+        <div class="info-item">
+          <label class="info-label">Currency</label>
+          <span class="info-value">{{ selectedSuspect.account?.currency || ' ' }}</span>
+        </div>
+        <div class="info-item">
+          <label class="info-label">Account Type</label>
+          <span class="info-value">{{ selectedSuspect.account?.type || ' ' }}</span>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Transaction Information Card (if exists) -->
+    <p-panel
+      *ngIf="selectedSuspect.transaction"
+      styleClass="info-panel transaction-panel">
+
+      <ng-template pTemplate="header">
+        <div class="panel-header">
+          <i class="pi pi-money-bill panel-icon"></i>
+          <span>Transaction Information</span>
+        </div>
+      </ng-template>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label class="info-label">Transaction Number</label>
+          <span class="info-value">{{ selectedSuspect.transaction.transaction_no }}</span>
+        </div>
+        <div class="info-item">
+          <label class="info-label">To Account</label>
+          <span class="info-value location-value">
+                <i class="pi pi-map-marker"></i>
+            {{ selectedSuspect.transaction.accountTo.account_no }}
+              </span>
+        </div>
+        <div class="info-item">
+          <label class="info-label">Amount</label>
+          <span class="info-value amount-value">{{ selectedSuspect.transaction.amount }}</span>
+        </div>
+        <div class="info-item">
+          <label class="info-label">Transaction Date</label>
+          <span class="info-value">{{ selectedSuspect.transaction.date | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="info-item">
+          <label class="info-label">IP Address</label>
+          <span class="info-value ip-address">{{ selectedSuspect.transaction.device?.ipAddress }}</span>
+        </div>
+        <div class="info-item">
+          <label class="info-label">Location</label>
+          <span class="info-value location-value">
+                <i class="pi pi-map-marker"></i>
+            {{ selectedSuspect.transaction.location }}
+              </span>
+        </div>
+      </div>
+    </p-panel>
+
+    <!-- Rule Information Card -->
+    <p-panel  styleClass="info-panel rule-panel">
+      <ng-template pTemplate="header">
+        <div class="panel-header">
+          <i class="pi pi-shield panel-icon"></i>
+          <span>Rule Information</span>
+        </div>
+      </ng-template>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label class="info-label">Rule Name</label>
+          <span class="info-value rule-name">{{ selectedSuspect.rule?.rule_name }}</span>
+        </div>
+        <div class="info-item">
+          <label class="info-label">Priority</label>
+          <p-tag
+            [value]="selectedSuspect.rule?.priority"
+            [severity]="getPrioritySeverity(selectedSuspect.rule?.priority)"
+            [icon]="getPriorityIcon(selectedSuspect.rule?.priority)">
+          </p-tag>
+        </div>
+        <div class="info-item full-width">
+          <label class="info-label">Action Taken</label>
+          <p-tag
+            [value]="selectedSuspect.actionMassage"
+            severity="info"
+            icon="pi pi-info-circle">
+          </p-tag>
+        </div>
+      </div>
+    </p-panel>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <p-splitButton
+        label="Take Action"
+        icon="pi pi-check"
+        [model]="actionItems"
+        (onClick)="takeAction(defaultAction)"
+        severity="primary">
+      </p-splitButton>
+
+    </div>
+  </ng-template>
+</p-dialog>

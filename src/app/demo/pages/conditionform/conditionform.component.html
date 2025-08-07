@@ -1,0 +1,185 @@
+<p-dialog
+  header="Add Condition"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '60vw' }"
+  [closable]="true"
+  [dismissableMask]="true"
+  (onHide)="closeDialog()"
+>  <form [formGroup]="conditionForm" class="w-full"> <!-- ✅ Form wrapper -->
+
+    <p-stepper [value]="1" class="basis-[50rem]">
+      <p-step-list>
+        <p-step [value]="1">Parameters</p-step>
+        <p-step [value]="2">Value Source</p-step>
+        <p-step [value]="3">Advanced</p-step>
+      </p-step-list>
+
+      <p-step-panels>
+        <!-- Step 1: Parameters -->
+        <p-step-panel [value]="1">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="custom-grid">
+
+              <div class="p-field">
+                <label>Rule</label>
+                <p-dropdown
+                  inputId="ruleId"
+                  formControlName="ruleId"
+                  [options]="rules"
+                  optionLabel="rule_name"
+                  optionValue="ruleId"
+                  placeholder="Select Rule"
+                ></p-dropdown>
+              </div>
+
+              <div class="p-field">
+                <label>Type</label>
+                <p-dropdown
+                  inputId="type"
+                  formControlName="type"
+                  [options]="dropdownOptions['type']"
+                  placeholder="Select Type"
+                  (onChange)="onTypeChange($event.value)"
+                ></p-dropdown>
+              </div>
+
+              <div class="p-field">
+                <label>Field</label>
+                <p-dropdown
+                  inputId="field"
+                  formControlName="field"
+                  [options]="dropdownOptions['field']"
+                  placeholder="Select Field"
+                ></p-dropdown>
+              </div>
+
+              <div class="p-field">
+                <label>Operator</label>
+                <p-dropdown
+                  inputId="operator"
+                  formControlName="operator"
+                  [options]="dropdownOptions['operator']"
+                  placeholder="Select Operator"
+                ></p-dropdown>
+              </div>
+
+              <div class="p-field">
+                <label>Logical Connector</label>
+                <p-dropdown
+                  inputId="logicalConnector"
+                  formControlName="logicalConnector"
+                  [options]="dropdownOptions['logicalConnector']"
+                  placeholder="Select Logical Connector"
+                ></p-dropdown>
+              </div>
+            </div>
+
+            <div class="next pt-6 justify-end">
+              <p-button  class = "next"  label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(2)" />
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <!-- Step 2: Value Source -->
+        <p-step-panel [value]="2">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="custom-grid">
+              <div class="p-field">
+                <label>Value Type</label>
+                <p-dropdown
+                  inputId="valueType"
+                  formControlName="valueType"
+                  [options]="dropdownOptions['valueType']"
+                  placeholder="Select Value Type"
+                  (onChange)="onValueChange($event.value)"
+                ></p-dropdown>
+              </div>
+
+              <ng-container *ngIf="staticSource; else sourceBlock">
+                <!-- Value -->
+                <div class="p-field">
+                  <label for="value">Value</label>
+                  <input
+                    id="value"
+                    type="text"
+                    pInputText
+                    formControlName="value"
+                    placeholder="Enter Value"
+                  />
+                </div>
+              </ng-container>
+
+              <ng-template #sourceBlock>
+                <div class="p-field">
+                  <label>Source</label>
+                  <p-dropdown
+                    inputId="source"
+                    formControlName="source"
+                    [options]="dropdownOptions['source']"
+                    placeholder="Select Source"
+                    (onChange)="onSourceChange($event.value)"
+                  ></p-dropdown>
+                </div>
+
+                <div class="p-field">
+                  <label>Source Field</label>
+                  <p-dropdown
+                    inputId="sourceField"
+                    formControlName="sourceField"
+                    [options]="dropdownOptions['sourceField']"
+                    placeholder="Select Source Field"
+                  ></p-dropdown>
+                </div>
+              </ng-template>
+            </div>
+
+            <div class="flex pt-6 justify-between">
+              <p-button  label="Back" severity="secondary" icon="pi pi-arrow-left" (onClick)="activateCallback(1)" />
+              <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(3)" />
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <!-- Step 3: Advanced -->
+        <p-step-panel [value]="3">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="custom-grid">
+              <div class="p-field">
+                <label>Aggregation Function</label>
+                <p-dropdown
+                  inputId="aggregationFunction"
+                  formControlName="aggregationFunction"
+                  [options]="dropdownOptions['aggregationFunction']"
+                  placeholder="Select Aggregation"
+                ></p-dropdown>
+              </div>
+
+              <div class="p-field">
+                <label>Interval</label>
+                <p-dropdown
+                  inputId="interval"
+                  formControlName="interval"
+                  [options]="dropdownOptions['interval']"
+                  placeholder="Select Interval"
+                ></p-dropdown>
+              </div>
+            </div>
+
+            <div class="flex pt-6 justify-start">
+              <p-button severity="secondary" label="Back" icon="pi pi-arrow-left" iconPos="right" (onClick)="activateCallback(2)" />
+              <p-button
+                label="Submit"
+                icon="pi pi-check"
+                iconPos="left"
+                (onClick)="onSubmit()"
+                severity="success">
+              </p-button>
+            </div>
+          </ng-template>
+        </p-step-panel>
+      </p-step-panels>
+    </p-stepper>
+
+  </form>
+</p-dialog>

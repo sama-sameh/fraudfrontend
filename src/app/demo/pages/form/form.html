@@ -1,0 +1,155 @@
+
+<!--<div class="form-container">-->
+<!--  <mat-card class="account-card">-->
+<!--    <mat-card-title class="form-title">-->
+<!--&lt;!&ndash;      <mat-icon class="form-icon">edit</mat-icon>&ndash;&gt;-->
+<!--      {{ METADATA[formType]?.title }}-->
+<!--    </mat-card-title>-->
+<!--    <mat-divider></mat-divider>-->
+
+<!--    <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()" class="form-body">-->
+<!--      <h3 class="section-title">Application</h3>-->
+
+<!--      <div class="form-grid">-->
+<!--        <ng-container *ngFor="let field of METADATA[formType]?.fields">-->
+<!--          &lt;!&ndash; Text/Number Field &ndash;&gt;-->
+<!--          <mat-form-field appearance="outline" class="clean-field" *ngIf="field.type !== 'dropdown'">-->
+<!--            <mat-label>{{ field.name }}</mat-label>-->
+<!--            <input-->
+<!--              matInput-->
+<!--              [type]="field.type === 'number' ? 'number' : 'text'"-->
+<!--              [formControlName]="field.name"-->
+<!--              [placeholder]="'Enter ' + field.name.toLowerCase()"-->
+<!--            />-->
+<!--            <mat-error *ngIf="dynamicForm.get(field.name)?.hasError('required')">-->
+<!--              {{ field.name }} is required-->
+<!--            </mat-error>-->
+<!--            <mat-error *ngIf="dynamicForm.get(field.name)?.hasError('minlength')">-->
+<!--              Minimum length not met-->
+<!--            </mat-error>-->
+<!--            <mat-error *ngIf="dynamicForm.get(field.name)?.hasError('maxlength')">-->
+<!--              Maximum length exceeded-->
+<!--            </mat-error>-->
+<!--          </mat-form-field>-->
+
+<!--          &lt;!&ndash; Dropdown Field &ndash;&gt;-->
+<!--          <mat-form-field appearance="outline" class="clean-field" *ngIf="field.type === 'dropdown'">-->
+<!--            <mat-label>{{ field.name }}</mat-label>-->
+<!--            <mat-select [formControlName]="field.name">-->
+<!--              <mat-option *ngFor="let option of dropdownOptions[field.name]" [value]="option[field.valueField || 'value']">-->
+<!--                {{ option[field.displayField || 'label'] }}-->
+<!--              </mat-option>-->
+<!--            </mat-select>-->
+<!--            <mat-error *ngIf="dynamicForm.get(field.name)?.hasError('required')">-->
+<!--              {{ field.displayField }} is required-->
+<!--            </mat-error>-->
+<!--          </mat-form-field>-->
+<!--        </ng-container>-->
+<!--      </div>-->
+
+<!--      <div class="form-actions">-->
+<!--        <button mat-raised-button color="primary" type="submit" [disabled]="dynamicForm.invalid">-->
+<!--          {{ METADATA[formType]?.button }}-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </mat-card>-->
+<!--</div>-->
+
+<!--<p-dialog-->
+<!--  [(visible)]="showSuccessDialog"-->
+<!--  modal="true"-->
+<!--  [closable]="false"-->
+<!--  [style]="{ width: '30vw' }"-->
+<!--  [baseZIndex]="10000"-->
+<!--  class="success-dialog"-->
+<!--&gt;-->
+<!--  <div class="success-content">-->
+<!--    <i class="pi pi-check-circle success-icon"></i>-->
+<!--    <h3>Submitted Successfully!</h3>-->
+<!--    <p>Your action has been completed successfully.</p>-->
+<!--    <button pButton type="button" label="OK" class="p-button-success" (click)="showSuccessDialog = false"></button>-->
+<!--  </div>-->
+<!--</p-dialog>-->
+
+  <p-card class="account-card shadow-4">
+    <ng-template pTemplate="header">
+      <div class="form-title flex align-items-center justify-content-between">
+        <span class="text-xl font-bold text-primary">
+          {{ METADATA[formType]?.title }}
+        </span>
+      </div>
+    </ng-template>
+
+    <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()" class="form-body p-fluid">
+      <div class="p-grid">
+        <ng-container *ngFor="let field of METADATA[formType]?.fields">
+          <!-- Text/Number Input -->
+          <div class="p-col-12 p-md-6" *ngIf="field.type !== 'dropdown'">
+            <div class="p-field">
+              <label for="{{ field.name }}" class="p-text-capitalize">{{ field.name }}</label>
+              <input
+                id="{{ field.name }}"
+                pInputText
+                [type]="field.type === 'number' ? 'number' : 'text'"
+                [formControlName]="field.name"
+                [placeholder]="'Enter ' + field.name.toLowerCase()"
+                class="w-full"
+              />
+              <small *ngIf="dynamicForm.get(field.name)?.hasError('required')&& (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched)" class="p-error">
+                {{ field.name }} is required
+              </small>
+              <small *ngIf="dynamicForm.get(field.name)?.hasError('minlength')&& (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched)" class="p-error">
+                Minimum length not met
+              </small>
+              <small *ngIf="dynamicForm.get(field.name)?.hasError('maxlength')&& (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched)" class="p-error">
+                Maximum length exceeded
+              </small>
+            </div>
+          </div>
+
+          <!-- Dropdown -->
+          <div class="p-col-12 p-md-6" *ngIf="field.type === 'dropdown'">
+            <div class="p-field">
+              <label for="{{ field.name }}" class="p-text-capitalize">{{ field.name }}</label>
+              <p-dropdown
+                [options]="dropdownOptions[field.name]"
+                [formControlName]="field.name"
+                [optionLabel]="field.displayField || 'label'"
+                [optionValue]="field.valueField || 'value'"
+                placeholder="Select {{ field.name.toLowerCase() }}"
+                class="w-full"
+              ></p-dropdown>
+              <small *ngIf="dynamicForm.get(field.name)?.hasError('required')&& (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched)" class="p-error">
+                {{ field.displayField }} is required
+              </small>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="form-actions mt-4 text-center">
+        <button pButton type="submit" label="{{ METADATA[formType]?.button }}" icon="pi pi-check"
+                class="p-button-rounded p-button-primary" [disabled]="dynamicForm.invalid">
+        </button>
+      </div>
+    </form>
+  </p-card>
+
+
+<!-- Success Dialog -->
+<p-dialog
+  [(visible)]="showSuccessDialog"
+  modal="true"
+  [closable]="false"
+  [style]="{ width: '30vw' }"
+  [baseZIndex]="10000"
+  class="success-dialog"
+>
+  <div class="success-content text-center p-3">
+    <i class="pi pi-check-circle text-success" style="font-size: 3rem;"></i>
+    <h3 class="mt-2">Submitted Successfully!</h3>
+    <p>Your action has been completed successfully.</p>
+    <button pButton type="button" label="OK" class="p-button-success mt-3" (click)="showSuccessDialog = false"></button>
+  </div>
+</p-dialog>

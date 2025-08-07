@@ -1,0 +1,144 @@
+<!--<div class="card enhanced-table">-->
+<!--  <p-table-->
+<!--    #dt2-->
+<!--    [value]="customers"-->
+<!--    dataKey="transactionId"-->
+<!--    [rows]="10"-->
+<!--    [rowsPerPageOptions]="[10, 25, 50]"-->
+<!--    [loading]="loading"-->
+<!--    [paginator]="true"-->
+<!--    [globalFilterFields]="['customerId', 'name', 'nationality_no', 'phone']"-->
+<!--    [tableStyle]="{ 'min-width': '75rem' }"-->
+<!--  >-->
+<!--    <ng-template pTemplate="header">-->
+<!--      <tr class="table-main-header">-->
+<!--        <th>Customer ID</th>-->
+<!--        <th>Name</th>-->
+<!--        <th>Nationality Number</th>-->
+<!--        <th>Phone Number</th>-->
+<!--      </tr>-->
+<!--      <tr class="table-filter-row">-->
+<!--        <th>-->
+<!--          <p-columnFilter-->
+<!--            type="text"-->
+<!--            field="customerId"-->
+<!--            placeholder="Search by ID"-->
+<!--            ariaLabel="Filter Customer ID" />-->
+<!--        </th>-->
+<!--        <th>-->
+<!--          <p-columnFilter-->
+<!--            type="text"-->
+<!--            field="name"-->
+<!--            placeholder="Search by Name"-->
+<!--            ariaLabel="Filter Name" />-->
+<!--        </th>-->
+<!--        <th>-->
+<!--          <p-columnFilter-->
+<!--            type="text"-->
+<!--            field="nationality_no"-->
+<!--            placeholder="Search by Nationality Number"-->
+<!--            ariaLabel="Filter Nationality" />-->
+<!--        </th>-->
+<!--        <th>-->
+<!--          <p-columnFilter-->
+<!--            type="text"-->
+<!--            field="phone"-->
+<!--            placeholder="Search by Phone Number"-->
+<!--            ariaLabel="Filter Phone" />-->
+<!--        </th>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+
+<!--    <ng-template pTemplate="body" let-customer>-->
+<!--      <tr>-->
+<!--        <td>{{ customer.id }}</td>-->
+<!--        <td>{{ customer.name }}</td>-->
+<!--        <td>{{ customer.nationality_id }}</td>-->
+<!--        <td>{{ customer.phone_number }}</td>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+
+<!--    <ng-template pTemplate="emptymessage">-->
+<!--      <tr>-->
+<!--        <td colspan="4" class="empty-message">-->
+<!--          <i class="pi pi-info-circle"></i> No customers found.-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--    </ng-template>-->
+<!--  </p-table>-->
+<!--</div>-->
+
+<div class="card">
+  <p-table
+    #dt2
+    [value]="customers"
+    dataKey="id"
+    [rows]="7"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading"
+    [paginator]="true"
+    [globalFilterFields]="['id', 'name', 'nationality', 'phone']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+  >
+
+
+    <ng-template pTemplate="header">
+
+      <tr style="background-color:blue">
+
+        <th style="width:5%;color:white;background-color:#4c4cf4">Customer ID</th>
+        <th style="width:5%;color:white;background-color:#4c4cf4">Name</th>
+        <th style="width:5%;color:white;background-color:#4c4cf4">Nationality Number</th>
+        <th style="width:5%;color:white;background-color:#4c4cf4">Phone Number</th>
+
+      </tr>
+
+      <tr>
+        <th>
+          <p-columnFilter
+            type="numeric"
+            field="id"
+            placeholder="Search by ID"
+            ariaLabel="Filter Customer ID" />
+        </th>
+        <th>
+          <p-columnFilter
+            type="text"
+            field="name"
+            placeholder="Search by Name"
+            ariaLabel="Filter Name" />
+        </th>
+        <th>
+          <p-columnFilter
+            type="text"
+            field="nationality"
+            placeholder="Search by Nationality"
+            ariaLabel="Filter To Nationality" />
+        </th>
+        <th>
+          <p-columnFilter
+            type="text"
+            field="phone"
+            placeholder="Search by Phone"
+            ariaLabel="Filter To Phone" />
+        </th>
+
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-customer>
+      <tr>
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.nationality_id}}</td>
+        <td>{{ customer.phone_number }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">No Customer found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

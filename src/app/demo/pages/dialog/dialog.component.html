@@ -1,0 +1,69 @@
+<p-dialog [(visible)]="visible" [style]="{ width: '50rem' }" modal="true" [closable]="true" [header]=METADATA[formType]?.title    (onHide)="closeDialog()"
+>
+@if(!showSuccessDialog){
+  <div class="account-card p-3">
+
+    <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()" class="form-body">
+
+      <div class="form-grid">
+        <ng-container *ngFor="let field of METADATA[formType]?.fields">
+          <!-- Text/Number Field -->
+          <div class="p-field" *ngIf="field.type !== 'dropdown'">
+            <label for="{{ field.name }}">{{ field.name }}</label>
+            <input
+              pInputText
+              [type]="field.type === 'number' ? 'number' : 'text'"
+              [formControlName]="field.name"
+              [placeholder]="'Enter ' + field.name.toLowerCase()"
+              [ngClass]="{ 'ng-invalid ng-dirty': dynamicForm.get(field.name)?.invalid && (dynamicForm.get(field.name)?.dirty || dynamicForm.get(field.name)?.touched) }"
+            />
+            <div class="p-error" *ngIf="dynamicForm.get(field.name)?.hasError('required')&&
+      (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched)">
+              {{ field.name }} is required
+            </div>
+            <div class="p-error" *ngIf="dynamicForm.get(field.name)?.hasError('minlength')&&
+      (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched)">
+              Minimum length not met
+            </div>
+            <div class="p-error" *ngIf="dynamicForm.get(field.name)?.hasError('maxlength')&&
+      (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched)">
+              Maximum length exceeded
+            </div>
+          </div>
+
+          <!-- Dropdown Field -->
+          <div class="p-field" *ngIf="field.type === 'dropdown'">
+            <label for="{{ field.name }}">{{ field.name }}</label>
+            <p-dropdown
+              [options]="dropdownOptions[field.name]"
+              [optionLabel]="field.displayField || 'label'"
+              [optionValue]="field.valueField || 'value'"
+              [formControlName]="field.name"
+              placeholder="Select {{ field.name }}"
+              [ngClass]="{ 'ng-invalid ng-dirty': dynamicForm.get(field.name)?.invalid && (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched) }"
+            ></p-dropdown>
+            <div class="p-error" *ngIf="dynamicForm.get(field.name)?.hasError('required')&&
+      (dynamicForm.get(field.name)?.dirty || !dynamicForm.get(field.name)?.untouched)">
+              {{ field.displayField || field.name }} is required
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="form-actions mt-3">
+        <button pButton type="submit" label="{{ METADATA[formType]?.button }}" [disabled]="dynamicForm.invalid" class="p-button-primary"></button>
+      </div>
+    </form>
+  </div>
+
+}
+  @if(showSuccessDialog){
+    <div class="success-content text-center">
+      <i class="pi pi-check-circle success-icon" style="font-size: 3rem; color: green;"></i>
+      <h3>Submitted Successfully!</h3>
+      <p>Your action has been completed successfully.</p>
+      <button pButton type="button" label="OK" class="p-button-success" (click)="closeDialog()"></button>
+    </div>
+  }
+
+</p-dialog>
