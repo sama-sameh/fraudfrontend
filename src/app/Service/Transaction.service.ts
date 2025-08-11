@@ -14,7 +14,7 @@ export class TransactionService {
   makeTransaction(transaction: Transaction): Observable<Transaction> {
     return this.http.post<Transaction>(this.baseUrl+'/make',transaction);
   }
-  runRules(){
-    return this.http.get(`${this.baseUrl}/run`);
+  runRules(rulesId:number[]){
+    return this.http.post(`${this.baseUrl}/run`,rulesId);
   }
 }

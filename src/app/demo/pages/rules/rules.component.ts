@@ -12,6 +12,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { ConditionService } from '../../../Service/Condition.service';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { TransactionService } from '../../../Service/Transaction.service';
+import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-rules',
@@ -26,7 +27,8 @@ import { TransactionService } from '../../../Service/Transaction.service';
     DialogComponent,
     ConditionformComponent,
     Tooltip,
-    ConfirmDialog
+    ConfirmDialog,
+    Checkbox
   ],
   providers:[ConfirmationService],
   templateUrl: './rules.component.html',
@@ -39,7 +41,7 @@ export class RulesComponent {
   newCondition = '';
   displayAddRuleDialog = false;
   displayAddConditionDialog = false;
-
+  selectedRuleIds: number[] = [];
   constructor(private ruleService: RuleService, private router: Router, private conditionService: ConditionService, private confirmationService: ConfirmationService,private transactionService:TransactionService) {
   }
 
@@ -127,6 +129,17 @@ export class RulesComponent {
     });
   }
   runRules(){
-    this.transactionService.runRules().subscribe();
+    this.transactionService.runRules(this.selectedRuleIds).subscribe({
+      next:()=>{
+        console.log('Selected IDs:', this.selectedRuleIds);
+      }
+    });
+  }
+  toggleSelection(ruleId: number, checked: boolean) {
+    if (checked) {
+      this.selectedRuleIds.push(ruleId);
+    } else {
+      this.selectedRuleIds = this.selectedRuleIds.filter(id => id !== ruleId);
+    }
   }
 }

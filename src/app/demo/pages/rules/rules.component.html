@@ -28,6 +28,12 @@
     <tr [ttRow]="rowNode" [class.high-severity]="rowData.severity === 'High'">
       <td>
         <div class="rule-name-container">
+          <p-checkbox
+            [binary]="true"
+            (onChange)="toggleSelection(rowData.id, $event.checked)"
+            *ngIf="!rowNode.parent"
+          >
+          </p-checkbox>
           <p-treetable-toggler [rowNode]="rowNode" *ngIf="!rowNode.leaf" />
           <i class="pi pi-shield" *ngIf="rowNode.leaf"></i>
           <span class="rule-name">{{ rowData.name }}</span>
