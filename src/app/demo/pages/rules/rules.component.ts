@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TreeTableModule } from 'primeng/treetable';
-import { ConfirmationService, TreeNode } from 'primeng/api';
+import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
 import { RuleService } from '../../../Service/Rule.service';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
@@ -13,6 +13,7 @@ import { ConditionService } from '../../../Service/Condition.service';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { TransactionService } from '../../../Service/Transaction.service';
 import { Checkbox } from 'primeng/checkbox';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-rules',
@@ -28,9 +29,10 @@ import { Checkbox } from 'primeng/checkbox';
     ConditionformComponent,
     Tooltip,
     ConfirmDialog,
-    Checkbox
+    Checkbox,
+    Toast
   ],
-  providers:[ConfirmationService],
+  providers:[ConfirmationService,MessageService],
   templateUrl: './rules.component.html',
   styleUrl: './rules.component.scss'
 })
@@ -42,7 +44,8 @@ export class RulesComponent {
   displayAddRuleDialog = false;
   displayAddConditionDialog = false;
   selectedRuleIds: number[] = [];
-  constructor(private ruleService: RuleService, private router: Router, private conditionService: ConditionService, private confirmationService: ConfirmationService,private transactionService:TransactionService) {
+  loading: boolean = false;
+  constructor(private ruleService: RuleService, private router: Router, private conditionService: ConditionService, private confirmationService: ConfirmationService,private transactionService:TransactionService,private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -129,11 +132,24 @@ export class RulesComponent {
     });
   }
   runRules(){
+    if (this.selectedRuleIds.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'No Selection',
+        detail: 'Please select at least one rule to run.'
+      });
+
+      return;
+    }
+    this.loading = true;
+
     this.transactionService.runRules(this.selectedRuleIds).subscribe({
       next:()=>{
         console.log('Selected IDs:', this.selectedRuleIds);
+        this.loading = false;
       }
     });
+
   }
   toggleSelection(ruleId: number, checked: boolean) {
     if (checked) {

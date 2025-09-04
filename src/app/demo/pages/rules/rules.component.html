@@ -1,6 +1,7 @@
 <div class="buttons">
   <div class="bttn-run">
     <button  pButton type="button" icon="pi pi-play" label="Run Rules"
+             [loading]="loading"
              (click)="runRules()"></button>
   </div>
   <div class="bttn">
@@ -103,3 +104,4 @@
   <app-conditionform [selectedRuleId]="selectedRule" [visible]="displayAddConditionDialog" (close)="onAddConditionDialogClose()"></app-conditionform>
 }
 <p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

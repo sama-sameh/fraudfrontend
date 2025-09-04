@@ -1,0 +1,55 @@
+.card {
+  padding: 1rem;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  //display: flex;
+}
+
+h2 {
+  margin: 0;
+}
+
+.p-button-success {
+  min-width: 150px;
+}
+.p-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
+  width: 100%;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+:host ::ng-deep .p-card {
+  border-radius: 12px;
+}
+
+:host ::ng-deep .p-tag-danger {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+}
+
+:host ::ng-deep .p-tag-success {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.custom-spinner {
+  width: 70px;
+  height: 70px;
+}

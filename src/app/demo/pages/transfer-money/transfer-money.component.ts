@@ -78,11 +78,12 @@ export class TransferMoneyComponent implements OnInit{
       .then(data => {
         // Access the location details
         this.currentLocation = `${data.city}, ${data.country_name}`;
-        // Optionally store IP address or other data if needed
+
+        // ✅ Update only IP, keep the detected device type
         this.deviceInfo = {
+          ...this.deviceInfo, // keep device type set in detectDevice()
           ipAddress: data.ip,
-          device_id:0,
-          type:'Unkown'
+          device_id: 0
         };
       })
       .catch(error => {
@@ -91,25 +92,24 @@ export class TransferMoneyComponent implements OnInit{
       });
   }
 
-
   detectDevice(): void {
-    // In a real app, you would get this from backend or device detection library
     const userAgent = navigator.userAgent;
     let deviceType = 'Desktop';
 
-    if (/Mobi|Android|iPhone|iPad|iPod/i.test(userAgent)) {
+    if (/Mobi|Android|iPhone|iPod/i.test(userAgent)) {
       deviceType = 'Mobile';
     } else if (/Tablet|iPad/i.test(userAgent)) {
       deviceType = 'Tablet';
     }
 
-    // Simulate getting IP (in real app, you'd get this from backend)
     this.deviceInfo = {
+      ...this.deviceInfo, // keep IP when detectLocation runs later
       device_id: null,
       type: deviceType,
-      ipAddress: '192.168.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255)
+      ipAddress: this.deviceInfo.ipAddress || '0.0.0.0'
     };
   }
+
 
   onSubmit(): void {
     if (this.transferForm.valid) {

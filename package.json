@@ -37,6 +37,7 @@
     "crypto-js": "^4.2.0",
     "ng-apexcharts": "^1.7.4",
     "ng2-charts": "^4.1.1",
+    "ngx-device-detector": "^10.1.0",
     "ngx-scrollbar": "^12.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^18.0.2",

@@ -1,0 +1,81 @@
+<div class="card">
+  <div class="p-d-flex p-jc-end p-ai-center p-mb-3 p-button-container" style="width: 100%;">
+    <button
+      pButton
+      type="button"
+      label="Get Prediction"
+      icon="pi pi-check"
+      class="p-button-success"
+      (click)="getPrediction()">
+    </button>
+
+  </div>
+
+  <p-table [value]="transactions" [(selection)]="selectedTransactions" dataKey="transaction_no" [paginator]="true" [rows]="10" [responsiveLayout]="'scroll'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th>Transaction No</th>
+        <th>Account From</th>
+        <th>Account To</th>
+        <th>Type</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Location</th>
+        <th>Device</th>
+        <!-- الأعمدة الجديدة -->
+        <th *ngIf="showPredictions && response?.length > 0">Prediction</th>
+        <th *ngIf="showPredictions && response?.length > 0">Probability</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-transaction>
+      <tr [pSelectableRow]="transaction">
+        <td>
+          <p-tableCheckbox [value]="transaction"></p-tableCheckbox>
+        </td>
+        <td>{{ transaction.transaction_no }}</td>
+        <td>{{ transaction.accountFrom?.account_no || '-' }}</td>
+        <td>{{ transaction.accountTo?.account_no || '-' }}</td>
+        <td>{{ transaction.type }}</td>
+        <td>{{ transaction.date | date:'medium' }}</td>
+        <td>{{ transaction.amount | currency }}</td>
+        <td>{{ transaction.status }}</td>
+        <td>{{ transaction.location }}</td>
+        <td>{{ transaction.device?.ipAddress || '-' }}</td>
+
+        <!-- إظهار القيم بس لو موجودة -->
+        <td *ngIf="showPredictions && response?.length > 0">
+          <p-tag
+            *ngIf="predictionMap[transaction.transaction_no]"
+            [value]="predictionMap[transaction.transaction_no].prediction === 1 ? 'Fraudulent' : 'Legitimate'"
+            [severity]="predictionMap[transaction.transaction_no].prediction === 1 ? 'danger' : 'success'">
+          </p-tag>
+        </td>
+
+        <td *ngIf="showPredictions && response?.length > 0">
+  <span *ngIf="predictionMap[transaction.transaction_no]">
+    {{ predictionMap[transaction.transaction_no].probability | percent:'1.0-2' }}
+  </span>
+        </td>
+
+
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="12">No transactions found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Overlay Loader -->
+<div class="overlay" *ngIf="loading">
+  <p-progressSpinner strokeWidth="4" styleClass="custom-spinner"></p-progressSpinner>
+</div>
+<p-toast></p-toast>

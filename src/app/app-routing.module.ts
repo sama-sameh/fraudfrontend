@@ -10,6 +10,7 @@ import { RulesComponent } from './demo/pages/rules/rules.component';
 import { publicGuard } from './Authentication/public.guard';
 import { RoleGuard } from './Authentication/role.guard';
 import { CustomersComponent } from './demo/pages/customers/customers.component';
+import { TransactionsComponent } from './demo/pages/transactions/transactions.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,9 @@ const routes: Routes = [
       },
       {
         path: 'rules',component:RulesComponent,canActivate: [publicGuard,RoleGuard],data:{role:'ADMIN'}
+      },
+      {
+        path: 'transactions',component:TransactionsComponent,canActivate: [publicGuard,RoleGuard],data:{role:'ADMIN'}
       }
 
     ]

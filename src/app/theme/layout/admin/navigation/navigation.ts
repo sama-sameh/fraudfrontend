@@ -132,11 +132,11 @@ export const NavigationItems: NavigationItem[] = [
         icon: 'ti ti-brand-chrome'
       },
       {
-        id: 'suspicious',
-        title: 'Suspicious Transactions',
+        id: 'transactions',
+        title: 'Transactions',
         type: 'item',
         classes: 'nav-item',
-        url: '/suspects',
+        url: '/transactions',
         icon: 'ti ti-vocabulary',
         target: true,
         external: false
